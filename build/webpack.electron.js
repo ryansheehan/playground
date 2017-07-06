@@ -1,3 +1,9 @@
+"use strict"
+
+process.env.BABEL_ENV = "electron";
+process.env.NODE_ENV = "production";
+
+const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
@@ -17,10 +23,19 @@ module.exports = {
         rules: [
             {
                 test: /.js$/,
-                use: "babel-loader",
-                exclude: /node_modules/
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        forceEnv: "electron"
+                    }
+                },
             }
         ]
+    },
+    node: {
+        __dirname: process.env.NODE_ENV !== 'production',
+        __filename: process.env.NODE_ENV !== 'production'
     },
     plugins: [
         new webpack.NoEmitOnErrorsPlugin()
